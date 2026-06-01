@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sapthagiri NPS University // Student Registration 2025</title>
+  <!-- SEO Tags -->
+  <meta name="description" content="Formal Student Enrollment and Registration Portal. Cycle 2025 admissions in zero-gravity theme.">
+  <meta name="theme-color" content="#080c14">
+
+  <!-- Google Fonts: Playfair Display (Formal Headings) + Source Sans 3 (Formal Body) + Orbitron (Holographic Accents) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Orbitron:wght@600;800;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Variables: Formal Gold & Deep Space Theme */
+    :root {
+      --bg: #060a12;
+      --surface: rgba(14, 24, 46, 0.75);
+      --surface-hover: rgba(14, 24, 46, 0.9);
+      --border: rgba(0, 240, 255, 0.15);
+      --border-focus: rgba(200, 168, 75, 0.5); /* Glowing gold */
+      --accent-gold: #c8a84b;                   /* Classic Formal Gold */
+      --accent-cyan: #00f0ff;                   /* Zero-g Cyan Glow */
+      --navy-dark: #0e182e;
+      --navy-light: #1a2744;
+      --text: #e0f2f7;                          /* Ice Blue */
+      --text-muted: #8ba2b0;                    /* Slate Blue */
+      --hazard: #ff0055;                        /* Glowing Hazard Pink */
+      --glow-gold: 0 0 15px rgba(200, 168, 75, 0.3);
+      --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.25);
+      --font-formal: 'Playfair Display', serif;
+      --font-body: 'Source Sans 3', sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+      --transition-physics: cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Core Resets */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Zero-Gravity Space Background with Nebula clouds */
+    .space-background {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background: 
+        radial-gradient(circle at 80% 20%, rgba(200, 168, 75, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 10% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+        #060a12;
+      overflow: hidden;
+    }
+
+    /* Slow drifting particle field (No canvas backdrop stars) */
+    .starfield {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      will-change: transform, opacity;
+      opacity: 0;
+    }
+
+    /* Main Console Wrap - Flat on screen (No 3D mouse rotation) */
+    .container {
+      width: 100%;
+      max-width: 660px; /* Aligned exactly with user container width */
+      margin: 40px 20px;
+      z-index: 10;
+      position: relative;
+    }
+
+    /* Glassmorphic Form Card Base */
+    .glass-card {
+      background: var(--surface);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(0, 240, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(200, 168, 75, 0.25);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(200, 168, 75, 0.1);
+    }
+
+    /* Letterhead header block (adapted from attached formal form) */
+    .letterhead {
+      background: var(--navy-dark);
+      border-bottom: 2.5px solid var(--accent-gold);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Floating seal emblem */
+    .seal {
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .seal img {
+      width: 100%;
+      height: auto;
+    }
+
+    @keyframes sealFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(5deg); }
+    }
+
+    .inst-info {
+      flex: 1;
+    }
+
+    .inst-name {
+      font-family: var(--font-formal);
+      font-size: 1.35rem;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.25;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .inst-sub {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+      font-weight: 600;
+    }
+
+    /* Golden Sub-header title bar */
+    .form-title-bar {
+      background: var(--accent-gold);
+      padding: 0.6rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .form-title-bar span {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    .ay-cycle-selector {
+      background: transparent;
+      border: 1px dashed rgba(14, 24, 46, 0.4);
+      color: var(--navy-dark);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .ay-cycle-selector:hover, .ay-cycle-selector:focus {
+      background: rgba(14, 24, 46, 0.1);
+      border-color: var(--navy-dark);
+    }
+
+    .ay-cycle-selector option {
+      background: var(--navy-dark);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* Card Content Body */
+    .form-body-content {
+      padding: 2rem 2.5rem 2.5rem;
+      position: relative;
+    }
+
+    /* Reference & Date row styles */
+    .ref-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .ref-text {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .ref-text strong {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Load Entrance float-up */
+    .staggered-item {
+      opacity: 0;
+      transform: translateY(25px);
+      animation: floatUpIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes floatUpIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Form Section Dividers */
+    .section-block {
+      margin-bottom: 1.6rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--navy-light);
+    }
+
+    .section-num {
+      width: 22px;
+      height: 22px;
+      background: var(--navy-light);
+      color: #fff;
+      border-radius: 50%;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-family: var(--font-formal);
+      font-size: 0.95rem;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Formal Grid Layout */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .grid-full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* Input Field elements with weightless levitation on focus */
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      transition: transform 0.3s var(--transition-physics);
+      will-change: transform;
+    }
+
+    .input-field:focus-within {
+      transform: translateY(-3px); /* Levitate slightly upward (No 3D distortion) */
+    }
+
+    .input-field label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    .input-field:focus-within label {
+      color: var(--accent-gold);
+    }
+
+    .input-field label .required-marker {
+      color: var(--hazard);
+      margin-left: 2px;
+    }
+
+    /* Input Element Styles overrides */
+    .cyber-input {
+      width: 100%;
+      background: rgba(14, 24, 46, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.6rem 0.8rem;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .cyber-input:focus {
+      border-color: var(--accent-gold);
+      background: rgba(14, 24, 46, 0.8);
+      box-shadow: 
+        0 10px 20px rgba(0,0,0,0.4),
+        0 0 12px rgba(200, 168, 75, 0.2);
+    }
+
+    .cyber-input[type="date"] {
+      color-scheme: dark;
+    }
+
+    textarea.cyber-input {
+      resize: none;
+      height: 80px;
+    }
+
+    select.cyber-input {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c8a84b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 14px;
+      padding-right: 44px;
+    }
+
+    select.cyber-input option {
+      background: var(--navy-dark);
+      color: #fff;
+    }
+
+    /* Error Shake and Red validation outline */
+    @keyframes validationShake {
+      0%, 100% { transform: translateY(0); }
+      15%, 45%, 75% { transform: translateX(-6px) translateY(-3px); }
+      30%, 60%, 90% { transform: translateX(6px) translateY(-3px); }
+    }
+
+    .input-field.invalid-shake {
+      animation: validationShake 0.4s ease-in-out;
+    }
+
+    .input-field.invalid-shake .cyber-input {
+      border-color: var(--hazard) !important;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.2) !important;
+      background: rgba(255, 0, 85, 0.02) !important;
+    }
+
+    .input-field.invalid-shake label {
+      color: var(--hazard) !important;
+    }
+
+    .error-msg-balloon {
+      font-size: 0.72rem;
+      color: var(--hazard);
+      font-family: var(--font-body);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      display: none;
+      margin-top: 2px;
+    }
+
+    .input-field.invalid-shake .error-msg-balloon {
+      display: block;
+    }
+
+    /* Formal Gender Row Buttons */
+    .gender-row-flex {
+      display: flex;
+      gap: 1.2rem;
+      padding-top: 6px;
+    }
+
+    .gender-option {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+    }
+
+    .gender-option input[type="radio"] {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--navy-light);
+      cursor: pointer;
+    }
+
+    .gender-option span {
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    /* High-tech Upload area with swept scanner laser line */
+    .upload-drag-box {
+      border: 1.5px dashed var(--border);
+      border-radius: 3px;
+      padding: 1rem;
+      text-align: center;
+      background: rgba(14, 24, 46, 0.3);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .upload-drag-box:hover {
+      border-color: var(--accent-gold);
+      background: rgba(200, 168, 75, 0.03);
+    }
+
+    .upload-drag-box.dragover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.05);
+    }
+
+    .upload-drag-box input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .photo-circle-preview {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent-gold);
+      box-shadow: var(--glow-gold);
+      margin: 0 auto 0.4rem;
+      display: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .upload-labels-block {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .upload-labels-block strong {
+      color: var(--accent-gold);
+    }
+
+    /* Biometric scanner laser line sweeps over photo zone */
+    .scanner-sweep-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .upload-drag-box.scanning .scanner-sweep-line {
+      opacity: 1;
+      animation: laserSweepLoop 1.2s ease-in-out infinite;
+    }
+
+    @keyframes laserSweepLoop {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
+
+    /* Formal Declaration Box style (adapted from attached file) */
+    .declaration-card {
+      background: rgba(14, 24, 46, 0.4);
+      border-left: 3px solid var(--accent-gold);
+      padding: 0.8rem 1rem;
+      margin-top: 1.5rem;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .declaration-card p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .declaration-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+      cursor: pointer;
+    }
+
+    .declaration-card input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--navy-light);
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+    }
+
+    .declaration-card label span {
+      font-size: 0.78rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* Action Buttons Row */
+    .action-button-row {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: flex-end;
+      margin-top: 1.8rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-reset-form {
+      padding: 0.65rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+    }
+
+    .btn-reset-form:hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      border-color: var(--text-muted);
+    }
+
+    .btn-submit-registry {
+      padding: 0.65rem 2rem;
+      border: none;
+      border-radius: 3px;
+      background: var(--accent-gold);
+      color: var(--navy-dark);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: var(--glow-gold);
+      transition: all 0.3s ease;
+      animation: bobButton 4s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .btn-submit-registry:hover {
+      background: #fff;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-submit-registry:active {
+      transform: scale(0.97);
+    }
+
+    @keyframes bobButton {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .official-footer-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Confetti sparks canvas */
+    #success-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      display: none;
+    }
+
+    /* Flat weightless Holographic success screen (No 3D mouse rotation) */
+    .success-overlay-window {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 10, 18, 0.96);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      backdrop-filter: blur(25px);
+    }
+
+    .success-overlay-window.reveal {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .admission-credentials-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--navy-dark);
+      border: 1px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 
+        var(--glow-gold),
+        0 20px 45px rgba(0,0,0,0.85);
+      position: relative;
+      animation: credentialEnter 1s cubic-bezier(0.19, 1, 0.22, 1) forwards, credentialBob 6s ease-in-out infinite 1s;
+      transform: translateY(50px);
+      opacity: 0;
+    }
+
+    @keyframes credentialEnter {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes credentialBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Scanning beam overlay on ID card */
+    .pass-scan-laser {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent-gold);
+      box-shadow: var(--glow-gold);
+      animation: laserSweepInfinite 4s linear infinite;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @keyframes laserSweepInfinite {
+      0% { top: 0%; opacity: 0; }
+      5% { opacity: 0.8; }
+      95% { opacity: 0.8; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .pass-header {
+      text-align: center;
+      border-bottom: 1px dashed rgba(200, 168, 75, 0.3);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .pass-header h3 {
+      font-family: var(--font-formal);
+      font-size: 1.35rem;
+      color: #fff;
+      font-weight: 700;
+      text-shadow: var(--glow-gold);
+    }
+
+    .pass-header p {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      color: var(--accent-gold);
+      margin-top: 4px;
+    }
+
+    .pass-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .pass-avatar-frame {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .pass-avatar-decor {
+      position: absolute;
+      inset: -5px;
+      border: 1px dashed var(--accent-gold);
+      border-radius: 50%;
+      animation: spinDecor 15s linear infinite;
+    }
+
+    @keyframes spinDecor {
+      100% { transform: rotate(360deg); }
+    }
+
+    .pass-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--accent-gold);
+      object-fit: cover;
+      box-shadow: var(--glow-gold);
+      background: var(--bg);
+    }
+
+    .pass-details-table {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      border-bottom: 1px dashed rgba(200, 168, 75, 0.3);
+      padding-bottom: 18px;
+    }
+
+    .pass-detail-cell {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pass-detail-cell span:first-child {
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .pass-detail-cell span:last-child {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .pass-barcode-layout {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0.85;
+    }
+
+    .pass-barcode-draw {
+      width: 80%;
+      height: 26px;
+      background: linear-gradient(90deg, 
+        #fff 2px, transparent 2px, 
+        #fff 5px, transparent 5px, 
+        #fff 6px, transparent 6px, 
+        #fff 10px, transparent 10px, 
+        #fff 12px, transparent 12px, 
+        #fff 13px, transparent 13px, 
+        #fff 19px, transparent 19px, 
+        #fff 21px, transparent 21px, 
+        #fff 25px, transparent 25px, 
+        #fff 26px, transparent 26px, 
+        #fff 30px, transparent 30px, 
+        #fff 33px, transparent 33px
+      );
+      background-size: 38px 100%;
+      background-repeat: repeat-x;
+    }
+
+    .pass-barcode-string {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      margin-top: 4px;
+    }
+
+    .btn-terminate-signal {
+      font-family: var(--font-display);
+      background: transparent;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 10px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-terminate-signal:hover {
+      background: var(--accent-gold);
+      color: var(--navy-dark);
+      box-shadow: var(--glow-gold);
+    }
+
+    /* Screen Reader Accessibility tags */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+
+    /* Floating Navigation bar in top right corner */
+    .portal-nav-wrap {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      z-index: 100;
+    }
+
+    .btn-portal-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: rgba(14, 24, 46, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent-gold);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s var(--transition-physics);
+    }
+
+    .btn-portal-nav:hover {
+      border-color: var(--accent-gold);
+      background: rgba(14, 24, 46, 0.9);
+      box-shadow: var(--glow-gold);
+      transform: translateY(-2px);
+    }
+
+    .btn-portal-nav:active {
+      transform: translateY(0);
+    }
+
+    /* Responsive Mobile layouts */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+        align-items: flex-start;
+      }
+
+      .portal-nav-wrap {
+        position: relative;
+        top: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+        width: 100%;
+      }
+      
+      .btn-portal-nav {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .container {
+        margin: 10px 0;
+      }
+
+      .letterhead {
+        padding: 1.8rem 1.5rem;
+        gap: 1.2rem;
+      }
+
+      .seal {
+        width: 56px;
+        height: 56px;
+      }
+
+      .seal-inner {
+        font-size: 1.7rem;
+      }
+
+      .inst-name {
+        font-size: 1.15rem;
+      }
+
+      .form-title-bar {
+        padding: 0.6rem 1.5rem;
+      }
+
+      .form-body-content {
+        padding: 2rem 1.5rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+      }
+
+      .btn-submit-registry {
+        width: 100%;
+        text-align: center;
+      }
+
+      .action-button-row {
+        flex-direction: column-reverse;
+      }
+    }
+  </style>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Firebase App & Firestore CDN SDKs (Compat/v8 CDN for HTML pages) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <!-- Custom decoupled Firebase API configuration -->
+  <script src="firebase-config.js"></script>
+
+  <!-- HTML to PDF Generator SDK (html2pdf.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <!-- Zero-g Background nebula backdrop -->
+  <div class="space-background"></div>
+
+  <!-- Drifting space particles starfield -->
+  <div class="starfield" id="starfield"></div>
+
+  <!-- Floating Portal Switcher Button -->
+  <div class="portal-nav-wrap">
+    <a href="login.html" class="btn-portal-nav">
+      <i data-lucide="log-in" style="width: 14px; height: 14px; stroke-width: 2.5px;"></i>
+      <span>Access Portal</span>
+    </a>
+  </div>
+
+  <!-- Accessible Form Container -->
+  <div class="container">
+    <h2 class="sr-only">Sapthagiri NPS University Academic Registration</h2>
+
+    <!-- Glassmorphic Flat Registry Card -->
+    <main class="glass-card" id="form-card">
+      
+      <!-- Letterhead (adapted from formal file) -->
+      <div class="letterhead">
+        <div class="seal">
+          <img src="logo.png" alt="Sapthagiri NPS University Seal" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 8px rgba(200, 168, 75, 0.45));">
+        </div>
+        <div class="inst-info">
+          <div class="inst-name">Sapthagiri NPS University</div>
+          <div class="inst-sub">OFFICE OF ACADEMIC AFFAIRS &amp; STUDENT ENROLLMENT</div>
+        </div>
+      </div>
+
+      <!-- Formal Golden Registry Title Bar -->
+      <div class="form-title-bar">
+        <span>Student Registration Form</span>
+        <select id="ay-cycle" class="ay-cycle-selector" aria-label="Academic Year Cycle">
+          <option value="AY 2025-26" selected>AY 2025-26</option>
+          <option value="AY 2026-27">AY 2026-27</option>
+          <option value="AY 2027-28">AY 2027-28</option>
+          <option value="AY 2028-29">AY 2028-29</option>
+          <option value="AY 2029-30">AY 2029-30</option>
+        </select>
+      </div>
+
+      <!-- Interactive Form Body -->
+      <div class="form-body-content">
+        
+        <!-- Registration Metadata Row -->
+        <div class="ref-row staggered-item" style="animation-delay: 0.05s;">
+          <span class="ref-text">Form No. <strong id="formNo">REG-2025-XXXX</strong></span>
+          <span class="ref-text">Date: <strong id="todayDate"></strong></span>
+        </div>
+
+        <form id="registration-form" novalidate>
+          
+          <!-- SECTION 1: PERSONAL INFORMATION -->
+          <div class="section-block staggered-item" style="animation-delay: 0.1s;">
+            <div class="section-header">
+              <div class="section-num">1</div>
+              <h3 class="section-title">Personal Information</h3>
+            </div>
+            
+            <div class="form-grid">
+              
+              <!-- Full Name -->
+              <div class="input-field">
+                <label for="full-name">Full Name <span class="required-marker">*</span></label>
+                <input type="text" id="full-name" class="cyber-input" placeholder="As per official records" required aria-required="true" autocomplete="name">
+                <span class="error-msg-balloon">This field is required.</span>
+              </div>
+
+              <!-- SRN -->
+              <div class="input-field">
+                <label for="student-id">SRN <span class="required-marker">*</span></label>
+                <input type="text" id="student-id" class="cyber-input" placeholder="e.g. SRN25CS001" required aria-required="true">
+                <span class="error-msg-balloon">This field is required.</span>
+              </div>
+
+              <!-- Date of Birth -->
+              <div class="input-field">
+                <label for="dob">Date of Birth <span class="required-marker">*</span></label>
+                <input type="date" id="dob" class="cyber-input" required aria-required="true">
+                <span class="error-msg-balloon">This field is required.</span>
+              </div>
+
+              <!-- Gender -->
+              <div class="input-field">
+                <label>Gender <span class="required-marker">*</span></label>
+                <div class="gender-row-flex" role="radiogroup" aria-label="Gender Selector">
+                  <label class="gender-option">
+                    <input type="radio" name="gender" value="Male" checked>
+                    <span>Male</span>
+                  </label>
+                  <label class="gender-option">
+                    <input type="radio" name="gender" value="Female">
+                    <span>Female</span>
+                  </label>
+                  <label class="gender-option">
+                    <input type="radio" name="gender" value="Other">
+                    <span>Other</span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SECTION 2: CONTACT DETAILS -->
+          <div class="section-block staggered-item" style="animation-delay: 0.15s;">
+            <div class="section-header">
+              <div class="section-num">2</div>
+              <h3 class="section-title">Contact Details</h3>
+            </div>
+
+            <div class="form-grid">
+              
+              <!-- Email -->
+              <div class="input-field">
+                <label for="email">Email Address <span class="required-marker">*</span></label>
+                <input type="email" id="email" class="cyber-input" placeholder="official@email.com" required aria-required="true" autocomplete="email">
+                <span class="error-msg-balloon">Enter a valid email address.</span>
+              </div>
+
+              <!-- Phone -->
+              <div class="input-field">
+                <label for="phone">Phone Number <span class="required-marker">*</span></label>
+                <input type="tel" id="phone" class="cyber-input" placeholder="+91 00000 00000" required aria-required="true" autocomplete="tel">
+                <span class="error-msg-balloon">This field is required.</span>
+              </div>
+
+              <!-- Address -->
+              <div class="input-field grid-full-width">
+                <label for="address">Residential Address</label>
+                <textarea id="address" class="cyber-input" placeholder="House No., Street, City, State, PIN Code" required aria-required="true"></textarea>
+                <span class="error-msg-balloon">This field is required.</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SECTION 3: ACADEMIC INFORMATION -->
+          <div class="section-block staggered-item" style="animation-delay: 0.2s;">
+            <div class="section-header">
+              <div class="section-num">3</div>
+              <h3 class="section-title">Academic Information</h3>
+            </div>
+
+            <div class="form-grid">
+              
+              <!-- Programme -->
+              <div class="input-field">
+                <label for="course">Programme / Course <span class="required-marker">*</span></label>
+                <select id="course" class="cyber-input" required aria-required="true">
+                  <option value="">— Select Programme —</option>
+                  <option>B.Tech Computer Science</option>
+                  <option>B.Tech Electronics</option>
+                  <option>B.Sc Physics</option>
+                  <option>B.Sc Mathematics</option>
+                  <option>B.Com (Honours)</option>
+                  <option>MBA Business Administration</option>
+                  <option>M.Tech AI &amp; Machine Learning</option>
+                  <option>MCA</option>
+                  <option>BCA</option>
+                </select>
+                <span class="error-msg-balloon">Please select a programme.</span>
+              </div>
+
+              <!-- Year -->
+              <div class="input-field">
+                <label for="academic-year">Academic Year <span class="required-marker">*</span></label>
+                <select id="academic-year" class="cyber-input" required aria-required="true">
+                  <option value="">— Select Year —</option>
+                  <option>1st Year</option>
+                  <option>2nd Year</option>
+                  <option>3rd Year</option>
+                  <option>4th Year</option>
+                </select>
+                <span class="error-msg-balloon">Please select academic year.</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SECTION 4: PHOTO UPLOAD -->
+          <div class="section-block staggered-item" style="animation-delay: 0.25s;">
+            <div class="section-header">
+              <div class="section-num">4</div>
+              <h3 class="section-title">Photograph</h3>
+            </div>
+
+            <!-- Upload drag drop box -->
+            <div class="upload-drag-box" id="upload-zone">
+              <div class="scanner-sweep-line"></div>
+              <input type="file" id="profile-photo" accept="image/*" aria-label="Upload photograph">
+              
+              <!-- Image preview clip -->
+              <img id="photo-preview-element" class="photo-circle-preview" alt="Passport photograph preview">
+              
+              <div class="upload-labels-block" id="upload-labels-block">
+                <strong>Click to upload</strong> or drag and drop<br>
+                Passport-size photograph (JPG, PNG — max 2MB)
+              </div>
+            </div>
+            <div class="input-field">
+              <span class="error-msg-balloon" id="photo-error-balloon" style="display: none;">Passport-size photograph is required.</span>
+            </div>
+          </div>
+
+          <!-- DECLARATION BLOCK -->
+          <div class="declaration-card staggered-item" style="animation-delay: 0.3s;">
+            <p>I hereby declare that the information furnished above is true, complete, and correct to the best of my knowledge. I understand that any false statement may result in cancellation of registration.</p>
+            <label>
+              <input type="checkbox" id="agree">
+              <span>I have read and agree to the terms and conditions of enrollment.</span>
+            </label>
+            <div class="input-field">
+              <span class="error-msg-balloon" id="agree-error-balloon" style="display: none;">You must accept the declaration to proceed.</span>
+            </div>
+          </div>
+
+          <!-- FORM BUTTON ACTION ROW -->
+          <div class="action-button-row staggered-item" style="animation-delay: 0.35s;">
+            <button type="button" class="btn-reset-form" id="btn-reset">Clear Form</button>
+            <button type="submit" class="btn-submit-registry" id="btn-submit">Submit Registration</button>
+          </div>
+
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Zero-g sparks success canvas -->
+  <canvas id="success-canvas"></canvas>
+
+  <!-- Interactive Holographic security admission telemetry pass overlay -->
+  <div class="success-overlay-window" id="success-overlay">
+    <div class="admission-credentials-card" id="success-card">
+      <div class="pass-scan-laser"></div>
+      
+      <!-- Card brackets styling -->
+      <div class="pass-bracket pb-tl"></div>
+      <div class="pass-bracket pb-tr"></div>
+      <div class="pass-bracket pb-bl"></div>
+      <div class="pass-bracket pb-br"></div>
+
+      <div class="pass-header">
+        <h3>Registration Submitted</h3>
+        <p id="success-pass-subheader">Sapthagiri NPS University // Travel &amp; Admissions Pass</p>
+      </div>
+
+      <div class="pass-body">
+        <div class="pass-avatar-frame">
+          <div class="pass-avatar-decor"></div>
+          <img class="pass-avatar-img" id="success-avatar" src="" alt="Authorized Student Portrait Scan">
+        </div>
+
+        <div class="pass-details-table">
+          <div class="pass-detail-cell">
+            <span>[ Student Name ]</span>
+            <span id="success-name">ELENA ROSTOVA</span>
+          </div>
+          <div class="pass-detail-cell">
+            <span>[ SRN ]</span>
+            <span id="success-id">SRN25CS001</span>
+          </div>
+          <div class="pass-detail-cell">
+            <span>[ Programme / Course ]</span>
+            <span id="success-course">B.TECH COMPUTER SCIENCE</span>
+          </div>
+          <div class="pass-detail-cell">
+            <span>[ Academic Year ]</span>
+            <span id="success-cycle">1ST YEAR</span>
+          </div>
+          <div class="pass-detail-cell" style="grid-column: span 2;">
+            <span>[ Residential Address ]</span>
+            <span id="success-coords" style="font-family: var(--font-formal); font-size: 0.85rem; color: var(--accent-gold); overflow-wrap: break-word;">BANGALORE</span>
+          </div>
+        </div>
+
+        <div class="pass-barcode-layout">
+          <div class="pass-barcode-draw"></div>
+          <span class="pass-barcode-string" id="success-barcode-text">STU-2025-4920</span>
+        </div>
+
+        <div class="pass-actions" style="display: flex; gap: 0.8rem; justify-content: center; width: 100%; margin-top: 8px;">
+          <button type="button" class="btn-terminate-signal" id="btn-download-pdf" style="background: var(--accent-gold); color: var(--navy-dark);">Download PDF Pass</button>
+          <button type="button" class="btn-terminate-signal" id="btn-close-circuit">Close Connection</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Core Logic Engine -->
+  <script>
+    // Init icons
+    lucide.createIcons();
+
+
+
+    // Elements
+    const formCard = document.getElementById('form-card');
+    const form = document.getElementById('registration-form');
+    const resetBtn = document.getElementById('btn-reset');
+    const submitBtn = document.getElementById('btn-submit');
+    const starfield = document.getElementById('starfield');
+    const successCanvas = document.getElementById('success-canvas');
+    const successCtx = successCanvas.getContext('2d');
+    const successOverlay = document.getElementById('success-overlay');
+    const successCard = document.getElementById('success-card');
+    const btnDismiss = document.getElementById('btn-close-circuit');
+
+    // Biometric Upload elements
+    const uploadZone = document.getElementById('upload-zone');
+    const photoInput = document.getElementById('profile-photo');
+    const photoPreview = document.getElementById('photo-preview-element');
+    const uploadLabels = document.getElementById('upload-labels-block');
+    const photoError = document.getElementById('photo-error-balloon');
+    const agreeError = document.getElementById('agree-error-balloon');
+    let loadedImageBase64 = '';
+
+    // Set Date & Auto-Form Number
+    const d = new Date();
+    document.getElementById('todayDate').textContent = d.toLocaleDateString('en-IN', {day:'2-digit',month:'long',year:'numeric'});
+    const randReg = 'REG-2025-' + String(Math.floor(1000 + Math.random() * 9000));
+    document.getElementById('formNo').textContent = randReg;
+
+    // Convert SRN entries to uppercase
+    const studentIdInput = document.getElementById('student-id');
+    studentIdInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.toUpperCase();
+    });
+
+    // Zero-g background drifting particles (60 stars, varying depth)
+    const starCount = 60;
+    const stars = [];
+
+    function initStarfield() {
+      for (let i = 0; i < starCount; i++) {
+        const span = document.createElement('span');
+        span.classList.add('star');
+        
+        const size = Math.random() * 4.5 + 1.2;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const opacity = Math.random() * 0.6 + 0.15;
+        const zIndex = Math.floor(Math.random() * 3) - 2;
+
+        span.style.width = `${size}px`;
+        span.style.height = `${size}px`;
+        span.style.left = `${x}%`;
+        span.style.top = `${y}%`;
+        span.style.opacity = opacity;
+        span.style.zIndex = zIndex;
+
+        // Apply depth blur
+        if (size > 3.8) {
+          span.style.filter = `blur(${Math.random() * 1.5 + 0.5}px)`;
+        }
+
+        // Palette variations
+        const pVariant = Math.random();
+        if (pVariant > 0.8) {
+          span.style.background = 'var(--accent-gold)';
+          span.style.boxShadow = '0 0 8px var(--accent-gold)';
+        } else if (pVariant > 0.6) {
+          span.style.background = 'var(--accent-cyan)';
+          span.style.boxShadow = '0 0 8px var(--accent-cyan)';
+        } else {
+          span.style.background = '#e0f2f7';
+        }
+
+        starfield.appendChild(span);
+
+        stars.push({
+          el: span,
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 0.04,
+          vy: (Math.random() - 0.5) * 0.03 - 0.015 // floating upward bias
+        });
+      }
+    }
+
+    function animateStarfield() {
+      stars.forEach(s => {
+        s.x += s.vx;
+        s.y += s.vy;
+
+        if (s.x < -5) s.x = 105;
+        if (s.x > 105) s.x = -5;
+        if (s.y < -5) s.y = 105;
+        if (s.y > 105) s.y = -5;
+
+        s.el.style.left = `${s.x}%`;
+        s.el.style.top = `${s.y}%`;
+      });
+      requestAnimationFrame(animateStarfield);
+    }
+
+    initStarfield();
+    animateStarfield();
+
+
+    // Biometric file upload parser with scanner effect
+    function uploadBioFile(file) {
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert('Biometric scanner only accepts image files.');
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Biometric scan exceeds max 5MB size limit.');
+        return;
+      }
+
+      uploadZone.classList.add('scanning');
+      photoError.style.display = 'none';
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // scan delay
+        setTimeout(() => {
+          loadedImageBase64 = e.target.result;
+          photoPreview.src = loadedImageBase64;
+          photoPreview.style.display = 'block';
+          
+          uploadZone.classList.remove('scanning');
+          uploadLabels.innerHTML = `<strong>${file.name.toUpperCase()}</strong> TRANSMITTED`;
+        }, 1300);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    photoInput.addEventListener('change', (e) => {
+      uploadBioFile(e.target.files[0]);
+    });
+
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('dragover');
+    });
+
+    uploadZone.addEventListener('dragleave', () => {
+      uploadZone.classList.remove('dragover');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        uploadBioFile(e.dataTransfer.files[0]);
+      }
+    });
+
+
+    // Reset logic (adapted from attached formal registry)
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      loadedImageBase64 = '';
+      photoPreview.src = '';
+      photoPreview.style.display = 'none';
+      uploadLabels.innerHTML = `<strong>Click to upload</strong> or drag and drop<br>Passport-size photograph (JPG, PNG — max 2MB)`;
+      
+      // Clear visual invalid checks
+      document.querySelectorAll('.input-field').forEach(el => {
+        el.classList.remove('invalid-shake');
+      });
+      photoError.style.display = 'none';
+      agreeError.style.display = 'none';
+    });
+
+
+    // Form Inputs Validation with neon alerts
+    function validateFormInputs() {
+      let valid = true;
+
+      const name = document.getElementById('full-name');
+      const sid = document.getElementById('student-id');
+      const email = document.getElementById('email');
+      const phone = document.getElementById('phone');
+      const course = document.getElementById('course');
+      const year = document.getElementById('academic-year');
+      const dob = document.getElementById('dob');
+      const address = document.getElementById('address');
+      const agree = document.getElementById('agree');
+
+      // validation blocks
+      const checks = [
+        { el: name, ok: v => v.trim().length > 1 },
+        { el: sid, ok: v => v.trim().length > 1 },
+        { el: email, ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+        { el: phone, ok: v => v.trim().length > 4 },
+        { el: course, ok: v => v !== '' },
+        { el: year, ok: v => v !== '' },
+        { el: dob, ok: v => v !== '' },
+        { el: address, ok: v => v.trim().length > 1 }
+      ];
+
+      checks.forEach(c => {
+        const fieldBlock = c.el.closest('.input-field');
+        if (!c.ok(c.el.value)) {
+          fieldBlock.classList.add('invalid-shake');
+          setTimeout(() => {
+            fieldBlock.classList.remove('invalid-shake');
+          }, 500);
+          valid = false;
+        } else {
+          fieldBlock.classList.remove('invalid-shake');
+        }
+      });
+
+      // Bio upload check
+      if (!loadedImageBase64) {
+        photoError.style.display = 'block';
+        valid = false;
+      } else {
+        photoError.style.display = 'none';
+      }
+
+      // Agreement Check
+      if (!agree.checked) {
+        agreeError.style.display = 'block';
+        valid = false;
+      } else {
+        agreeError.style.display = 'none';
+      }
+
+      return valid;
+    }
+
+
+    // Confetti sparks physics engine
+    let sparkArray = [];
+    let isSparkPhysicsOn = false;
+
+    function resizeCanvas() {
+      successCanvas.width = window.innerWidth;
+      successCanvas.height = window.innerHeight;
+    }
+
+    class GoldSpark {
+      constructor() {
+        this.x = Math.random() * successCanvas.width;
+        this.y = successCanvas.height + Math.random() * 80;
+        this.size = Math.random() * 6 + 3; // size: 3px to 9px
+        
+        // float speeds
+        this.vy = -(Math.random() * 2.5 + 2);
+        this.vx = (Math.random() - 0.5) * 1.4;
+
+        const colors = [
+          '#c8a84b', // Gold
+          '#00f0ff', // Cyan
+          '#fff',    // White
+          '#ffd700'  // Bright Gold
+        ];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        
+        this.angle = Math.random() * 360;
+        this.angleSpeed = (Math.random() - 0.5) * 3;
+        this.opacity = Math.random() * 0.4 + 0.6;
+        this.glow = Math.random() > 0.4;
+      }
+
+      update() {
+        this.y += this.vy;
+        this.x += this.vx;
+        this.angle += this.angleSpeed;
+        this.vx += Math.sin(this.y * 0.012) * 0.05;
+
+        if (this.y < successCanvas.height * 0.2) {
+          this.opacity -= 0.015;
+        }
+      }
+
+      draw() {
+        successCtx.save();
+        successCtx.translate(this.x, this.y);
+        successCtx.rotate((this.angle * Math.PI) / 180);
+        successCtx.globalAlpha = Math.max(0, this.opacity);
+        
+        successCtx.fillStyle = this.color;
+        if (this.glow) {
+          successCtx.shadowBlur = 12;
+          successCtx.shadowColor = this.color;
+        }
+
+        // Draw diamond spark
+        successCtx.beginPath();
+        successCtx.moveTo(0, -this.size);
+        successCtx.lineTo(this.size, 0);
+        successCtx.lineTo(0, this.size);
+        successCtx.lineTo(-this.size, 0);
+        successCtx.closePath();
+        successCtx.fill();
+
+        successCtx.restore();
+      }
+    }
+
+    function initSparks() {
+      sparkArray = [];
+      for (let i = 0; i < 150; i++) {
+        sparkArray.push(new GoldSpark());
+      }
+      isSparkPhysicsOn = true;
+      successCanvas.style.display = 'block';
+    }
+
+    function animateSparks() {
+      if (!isSparkPhysicsOn) return;
+
+      successCtx.clearRect(0, 0, successCanvas.width, successCanvas.height);
+      sparkArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      if (sparkArray.length < 220 && Math.random() > 0.3) {
+        sparkArray.push(new GoldSpark());
+      }
+
+      sparkArray = sparkArray.filter(p => p.opacity > 0 && p.y > -20);
+      requestAnimationFrame(animateSparks);
+    }
+
+
+    // Helper to run visual warp admission transition
+    function executeLaunchSequence(nameVal, idVal, courseText, cycleText, addressVal, ayCycleVal) {
+      // 1. Submit Button shoots upward
+      submitBtn.style.animation = 'none';
+      submitBtn.style.transition = 'transform 0.8s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.8s';
+      submitBtn.style.transform = 'translateY(-1000px) scale(0.1)';
+      submitBtn.style.opacity = '0';
+      submitBtn.style.pointerEvents = 'none';
+
+      // 2. Main card console detaches and drifts upward (No 3D mouse tilt)
+      setTimeout(() => {
+        formCard.style.transition = 'transform 2.2s cubic-bezier(0.64, 0, 0.78, 0), opacity 2.2s';
+        formCard.style.transform = 'translateY(-120vh) scale(0.4)';
+        formCard.style.opacity = '0';
+        formCard.style.pointerEvents = 'none';
+      }, 400);
+
+      // 3. Spawns zero-gravity sparks
+      setTimeout(() => {
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        initSparks();
+        animateSparks();
+      }, 600);
+
+      // 4. Reveal secure credential admission pass overlay (Flat, weightless floating)
+      setTimeout(() => {
+        document.getElementById('success-name').textContent = nameVal;
+        document.getElementById('success-id').textContent = idVal;
+        document.getElementById('success-course').textContent = courseText;
+        document.getElementById('success-cycle').textContent = cycleText;
+        document.getElementById('success-coords').textContent = addressVal;
+        document.getElementById('success-barcode-text').textContent = idVal;
+
+        // Dynamically update success pass subheader with the selected Academic Year!
+        document.getElementById('success-pass-subheader').textContent = `Sapthagiri NPS University // Travel & Admissions Pass (${ayCycleVal})`;
+
+        // Bind portrait
+        document.getElementById('success-avatar').src = loadedImageBase64;
+
+        successOverlay.classList.add('reveal');
+      }, 2000);
+    }
+
+    // Success Warp Trigger Transition
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (!validateFormInputs()) {
+        if (navigator.vibrate) navigator.vibrate(100);
+        return;
+      }
+
+      // Validated! Run database saving and flat transition
+      
+      const nameVal = document.getElementById('full-name').value.toUpperCase();
+      const idVal = document.getElementById('student-id').value.toUpperCase();
+      const courseSelect = document.getElementById('course');
+      const courseText = courseSelect.options[courseSelect.selectedIndex].text.toUpperCase();
+      const cycleSelect = document.getElementById('academic-year');
+      const cycleText = cycleSelect.options[cycleSelect.selectedIndex].text.toUpperCase();
+      const addressVal = document.getElementById('address').value.toUpperCase();
+      const ayCycleVal = document.getElementById('ay-cycle').value;
+
+      const emailVal = document.getElementById('email').value.trim().toLowerCase();
+
+      const studentPayload = {
+        formNo: randReg,
+        fullName: nameVal,
+        studentId: idVal,
+        dob: document.getElementById('dob').value,
+        gender: document.querySelector('input[name="gender"]:checked').value,
+        email: emailVal,
+        phone: document.getElementById('phone').value.trim(),
+        address: addressVal,
+        programme: courseText,
+        academicYear: cycleText,
+        admissionCycle: ayCycleVal, // Saves selected Academic Year (e.g. "AY 2025-26")
+        profilePhoto: loadedImageBase64 || "", // Saves base64 string
+        submittedAt: new Date(), // Native Firestore Timestamp for custom sorting and calendar filters
+        submissionTime: new Date().toLocaleString('en-IN') // Readable Indian Standard Time string
+      };
+
+      // Perform Firestore Write if Firebase is ready
+      if (isFirebaseReady) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "TRANSMITTING TELEMETRY...";
+
+        db.collection("students").doc(emailVal).set(studentPayload)
+          .then(() => {
+            console.log("Telemetry successfully saved to Firestore. Document ID: ", emailVal);
+            executeLaunchSequence(nameVal, idVal, courseText, cycleText, addressVal, ayCycleVal);
+          })
+          .catch((err) => {
+            console.error("Error writing document to Firestore: ", err);
+            alert("Database Error: Telemetry write failed. " + err.message);
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit Registration";
+          });
+      } else {
+        // Fallback: Offline Sandbox mode simulation
+        console.log("Saving student payload in Sandbox Mode (Offline):", studentPayload);
+        executeLaunchSequence(nameVal, idVal, courseText, cycleText, addressVal, ayCycleVal);
+      }
+    });
+
+    // Select the PDF download button
+    const btnDownloadPdf = document.getElementById('btn-download-pdf');
+
+    btnDownloadPdf.addEventListener('click', () => {
+      // Temporarily hide the action buttons inside the card during PDF generation to keep it clean!
+      const passActions = document.querySelector('.pass-actions');
+      const passLaser = document.querySelector('.pass-scan-laser');
+      const element = document.getElementById('success-card');
+      
+      // Save current style values to restore them later
+      const originalAnimation = element.style.animation;
+      const originalTransform = element.style.transform;
+      const originalTransition = element.style.transition;
+      const originalOpacity = element.style.opacity;
+      const originalDisplay = passActions.style.display;
+
+      // Freeze all active transitions/animations on card to ensure solid coordinate captures
+      // Force opacity 1 inline to override CSS sheet opacity: 0 rules
+      element.style.animation = 'none';
+      element.style.transform = 'none';
+      element.style.transition = 'none';
+      element.style.opacity = '1';
+      
+      // Hide actions completely (display: none) so that the card collapses to its exact content height
+      passActions.style.display = 'none';
+      if (passLaser) passLaser.style.display = 'none';
+
+      // Measure exact dimensions after hiding the buttons
+      const rect = element.getBoundingClientRect();
+      
+      // Convert CSS pixels to points (1 px = 0.75 pt) for jsPDF 1:1 mapping
+      const cardWidthPt = rect.width * 0.75;
+      const cardHeightPt = rect.height * 0.75;
+
+      const studentName = document.getElementById('success-name').textContent || "STUDENT";
+      const filenameStr = `Sapthagiri_NPS_University_Pass_${studentName.replace(/\s+/g, '_')}.pdf`;
+
+      // Set options to fit the card dimensions exactly with zero margins
+      const opt = {
+        margin:       0,
+        filename:     filenameStr,
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { 
+          width: rect.width,
+          height: rect.height,
+          scale: 3, // High scale for premium, high-resolution rendering
+          useCORS: true, 
+          backgroundColor: '#0e182e',
+          logging: false,
+          letterRendering: true,
+          scrollX: 0,
+          scrollY: 0
+        },
+        jsPDF:        { unit: 'pt', format: [cardWidthPt, cardHeightPt], orientation: 'portrait' }
+      };
+
+      // Generate and save the PDF
+      html2pdf().set(opt).from(element).save().then(() => {
+        // Restore actions, laser visibility, and animation physics!
+        passActions.style.display = originalDisplay;
+        if (passLaser) passLaser.style.display = 'block';
+        element.style.animation = originalAnimation;
+        element.style.transform = originalTransform;
+        element.style.transition = originalTransition;
+        element.style.opacity = originalOpacity;
+      }).catch(err => {
+        console.error("PDF generation failed:", err);
+        passActions.style.display = originalDisplay;
+        if (passLaser) passLaser.style.display = 'block';
+        element.style.animation = originalAnimation;
+        element.style.transform = originalTransform;
+        element.style.transition = originalTransition;
+        element.style.opacity = originalOpacity;
+      });
+    });
+
+    // Close Overlay pass and reload
+    btnDismiss.addEventListener('click', () => {
+      successOverlay.classList.remove('reveal');
+      isSparkPhysicsOn = false;
+      successCanvas.style.display = 'none';
+      
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    });
+  </script>
+</body>
+</html>

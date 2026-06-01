@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sapthagiri NPS University // Admin Telemetry</title>
+  
+  <!-- Security Guard: Immediate Block if unauthorized -->
+  <script>
+    if (!localStorage.getItem('sapthagiri_admin_token')) {
+      alert("Access Denied: Secure administrator session token not found. Redirecting to gateway portal...");
+      window.location.replace('login.html');
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Orbitron:wght@600;800;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* Design Tokens */
+    :root {
+      --bg: #060a12;
+      --surface: rgba(14, 24, 46, 0.75);
+      --border: rgba(0, 240, 255, 0.15);
+      --accent-gold: #c8a84b;
+      --accent-cyan: #00f0ff;
+      --navy-dark: #0e182e;
+      --navy-light: #1a2744;
+      --text: #e0f2f7;
+      --text-muted: #8ba2b0;
+      --hazard: #ff0055;
+      --glow-gold: 0 0 15px rgba(200, 168, 75, 0.3);
+      --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.25);
+      --font-formal: 'Playfair Display', serif;
+      --font-body: 'Source Sans 3', sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .space-background {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background: 
+        radial-gradient(circle at 80% 20%, rgba(200, 168, 75, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 10% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+        #060a12;
+    }
+
+    .starfield {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      will-change: transform, opacity;
+      opacity: 0;
+    }
+
+    /* Dashboard Header styling */
+    .dashboard-header {
+      background: var(--navy-dark);
+      border-bottom: 2.5px solid var(--accent-cyan);
+      padding: 1.2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 10;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .brand-seal {
+      width: 46px;
+      height: 46px;
+    }
+
+    .brand-seal img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.3));
+    }
+
+    .brand-titles h1 {
+      font-family: var(--font-formal);
+      font-size: 1.25rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .brand-titles p {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      color: var(--accent-cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .btn-signout {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1.2rem;
+      background: transparent;
+      border: 1px solid var(--hazard);
+      border-radius: 4px;
+      color: var(--hazard);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-signout:hover {
+      background: var(--hazard);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.45);
+    }
+
+    /* Grid Layout */
+    .dashboard-wrap {
+      flex: 1;
+      padding: 2.5rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+    }
+
+    /* Sidebar controls */
+    .sidebar-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    .stat-card h3 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat-val-wrapper {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .stat-num-value {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--accent-gold);
+      text-shadow: var(--glow-gold);
+      font-weight: 900;
+    }
+
+    .stat-sub-val {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      letter-spacing: 0.5px;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: var(--navy-dark);
+      border-radius: 2px;
+      margin-top: 0.8rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan));
+      width: 100%;
+      box-shadow: var(--glow-cyan);
+    }
+
+    .sidebar-actions-card {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      flex: 1;
+    }
+
+    .sidebar-actions-card h3 {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .sidebar-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      width: 100%;
+      padding: 0.7rem 1rem;
+      background: var(--navy-dark);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: var(--text-muted);
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 0.8rem;
+    }
+
+    .sidebar-nav-btn:hover {
+      color: #fff;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0,240,255,0.15);
+      transform: translateX(4px);
+    }
+
+    /* Main Board panel */
+    .main-telemetry-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .search-filter-card {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.2rem 1.8rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .search-bar-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-bar-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .cyber-search-input {
+      width: 100%;
+      background: var(--navy-dark);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.65rem 1rem 0.65rem 2.8rem;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .cyber-search-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0,240,255,0.15);
+    }
+
+    /* Table card styling */
+    .telemetry-grid-card {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .table-container-scroller {
+      overflow-x: auto;
+      flex: 1;
+    }
+
+    .cyber-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    .cyber-table th {
+      background: var(--navy-dark);
+      color: var(--accent-cyan);
+      font-family: var(--font-display);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 1.1rem 1.5rem;
+      border-bottom: 2px solid rgba(0, 240, 255, 0.25);
+    }
+
+    .cyber-table td {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-family: var(--font-body);
+    }
+
+    .cyber-table tr:hover {
+      background: rgba(0, 240, 255, 0.02);
+    }
+
+    .course-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      background: var(--navy-light);
+      border: 1px solid rgba(200, 168, 75, 0.2);
+      border-radius: 3px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+
+    .btn-row-action {
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 0.35rem 0.8rem;
+      border-radius: 3px;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-row-action:hover {
+      background: var(--accent-cyan);
+      color: var(--navy-dark);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* Loading overlay inside table */
+    .table-loading-panel {
+      padding: 4rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .loading-pulse {
+      width: 40px;
+      height: 40px;
+      border: 2.5px solid rgba(0, 240, 255, 0.15);
+      border-top-color: var(--accent-cyan);
+      border-radius: 50%;
+      animation: spinPulse 1s linear infinite;
+    }
+
+    @keyframes spinPulse {
+      to { transform: rotate(360deg); }
+    }
+
+    .no-results-panel {
+      padding: 4rem;
+      text-align: center;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    /* Floating credentials preview modal */
+    .success-overlay-window {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 10, 18, 0.96);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      backdrop-filter: blur(25px);
+    }
+
+    .success-overlay-window.reveal {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .admission-credentials-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--navy-dark);
+      border: 1px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 
+        var(--glow-gold),
+        0 20px 45px rgba(0,0,0,0.85);
+      position: relative;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .success-overlay-window.reveal .admission-credentials-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .pass-scan-laser {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent-gold);
+      box-shadow: var(--glow-gold);
+      animation: laserSweepInfinite 4s linear infinite;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .pass-header {
+      text-align: center;
+      border-bottom: 1px dashed rgba(200, 168, 75, 0.3);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .pass-header h3 {
+      font-family: var(--font-formal);
+      font-size: 1.35rem;
+      color: #fff;
+      font-weight: 700;
+      text-shadow: var(--glow-gold);
+    }
+
+    .pass-header p {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      color: var(--accent-gold);
+      margin-top: 4px;
+    }
+
+    .pass-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .pass-avatar-frame {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .pass-avatar-decor {
+      position: absolute;
+      inset: -5px;
+      border: 1px dashed var(--accent-gold);
+      border-radius: 50%;
+      animation: spinDecor 15s linear infinite;
+    }
+
+    .pass-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--accent-gold);
+      object-fit: cover;
+      box-shadow: var(--glow-gold);
+      background: var(--bg);
+    }
+
+    .pass-details-table {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      border-bottom: 1px dashed rgba(200, 168, 75, 0.3);
+      padding-bottom: 18px;
+    }
+
+    .pass-detail-cell {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pass-detail-cell span:first-child {
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .pass-detail-cell span:last-child {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .pass-barcode-layout {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0.85;
+    }
+
+    .pass-barcode-draw {
+      width: 80%;
+      height: 26px;
+      background: linear-gradient(90deg, 
+        #fff 2px, transparent 2px, 
+        #fff 5px, transparent 5px, 
+        #fff 6px, transparent 6px, 
+        #fff 10px, transparent 10px, 
+        #fff 12px, transparent 12px, 
+        #fff 13px, transparent 13px, 
+        #fff 19px, transparent 19px, 
+        #fff 21px, transparent 21px, 
+        #fff 25px, transparent 25px, 
+        #fff 26px, transparent 26px, 
+        #fff 30px, transparent 30px, 
+        #fff 33px, transparent 33px
+      );
+      background-size: 38px 100%;
+      background-repeat: repeat-x;
+    }
+
+    .pass-barcode-string {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      margin-top: 4px;
+    }
+
+    .btn-terminate-signal {
+      font-family: var(--font-display);
+      background: transparent;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 10px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-terminate-signal:hover {
+      background: var(--accent-gold);
+      color: var(--navy-dark);
+      box-shadow: var(--glow-gold);
+    }
+
+    .pass-bracket {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border: 2px solid var(--accent-gold);
+      pointer-events: none;
+    }
+    .pb-tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+    .pb-tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+    .pb-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+    .pb-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+    @media (max-width: 992px) {
+      .dashboard-wrap {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1.5rem;
+      }
+      .dashboard-header {
+        padding: 1rem 1.5rem;
+      }
+    }
+  </style>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Firebase compatibility script tags -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <!-- Firebase initialization configuration -->
+  <script src="firebase-config.js"></script>
+
+  <!-- HTML to PDF Generator SDK (html2pdf.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <div class="space-background"></div>
+  <div class="starfield" id="starfield"></div>
+
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="brand-section">
+      <div class="brand-seal">
+        <img src="logo.png" alt="Sapthagiri NPS University Logo">
+      </div>
+      <div class="brand-titles">
+        <h1>Sapthagiri NPS University</h1>
+        <p>Admin Telemetry Control Center</p>
+      </div>
+    </div>
+    <button class="btn-signout" id="btn-sign-out">
+      <i data-lucide="log-out" style="width: 13px; height: 13px;"></i>
+      <span>Disconnect</span>
+    </button>
+  </header>
+
+  <!-- Content Dashboard Wrapper -->
+  <div class="dashboard-wrap">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar-panel">
+      
+      <!-- Counter Stats Card -->
+      <div class="stat-card">
+        <h3>Enrollments Count</h3>
+        <div class="stat-val-wrapper">
+          <span class="stat-num-value" id="stats-counter">—</span>
+          <span class="stat-sub-val">Students</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Actions Panel -->
+      <div class="sidebar-actions-card">
+        <h3>Dashboard Routing</h3>
+        <a href="index.html" class="sidebar-nav-btn">
+          <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
+          <span>Open Registration</span>
+        </a>
+        <a href="login.html" class="sidebar-nav-btn">
+          <i data-lucide="shield" style="width: 14px; height: 14px;"></i>
+          <span>Login Gateway</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- Main Table Section -->
+    <section class="main-telemetry-panel">
+      
+      <!-- Search Block -->
+      <div class="search-filter-card">
+        <div class="search-bar-wrap">
+          <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+          <input type="text" class="cyber-search-input" id="table-search" placeholder="Filter registry by Student Name, SRN, Course, or Email...">
+        </div>
+      </div>
+
+      <!-- Data Grid Card -->
+      <div class="telemetry-grid-card">
+        <div class="table-container-scroller">
+          <table class="cyber-table" id="students-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>SRN</th>
+                <th>Programme / Course</th>
+                <th>Academic Year</th>
+                <th>Registration Date / Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+
+          <!-- Pulse Loader panel -->
+          <div class="table-loading-panel" id="table-loader">
+            <div class="loading-pulse"></div>
+            <span>QUERYING TELEMETRY RECORDS...</span>
+          </div>
+
+          <!-- Empty state panel -->
+          <div class="no-results-panel" id="table-empty">
+            <i data-lucide="alert-triangle" style="width: 32px; height: 32px; color: var(--accent-gold); margin-bottom: 0.8rem;"></i>
+            <p>No student registry document matches the specified telemetry filter.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Holographic details inspector modal -->
+  <div class="success-overlay-window" id="success-overlay">
+    <div class="admission-credentials-card" id="success-card">
+      <div class="pass-scan-laser"></div>
+      
+      <!-- Card brackets styling -->
+      <div class="pass-bracket pb-tl"></div>
+      <div class="pass-bracket pb-tr"></div>
+      <div class="pass-bracket pb-bl"></div>
+      <div class="pass-bracket pb-br"></div>
+
+      <div class="pass-header">
+        <h3>Registration Submitted</h3>
+        <p id="success-pass-subheader">Sapthagiri NPS University // Travel &amp; Admissions Pass</p>
+      </div>
+
+      <div class="pass-body">
+        <div class="pass-avatar-frame">
+          <div class="pass-avatar-decor"></div>
+          <img class="pass-avatar-img" id="success-avatar" src="" alt="Authorized Student Portrait Scan">
+        </div>
+
+        <div class="pass-details-table">
+          <div class="pass-detail-cell">
+            <span>[ Student Name ]</span>
+            <span id="success-name">—</span>
+          </div>
+          <div class="pass-detail-cell">
+            <span>[ SRN ]</span>
+            <span id="success-id">—</span>
+          </div>
+          <div class="pass-detail-cell">
+            <span>[ Programme / Course ]</span>
+            <span id="success-course">—</span>
+          </div>
+          <div class="pass-detail-cell">
+            <span>[ Academic Year ]</span>
+            <span id="success-cycle">—</span>
+          </div>
+          <div class="pass-detail-cell" style="grid-column: span 2;">
+            <span>[ Residential Address ]</span>
+            <span id="success-coords" style="font-family: var(--font-formal); font-size: 0.85rem; color: var(--accent-gold); overflow-wrap: break-word;">—</span>
+          </div>
+        </div>
+
+        <div class="pass-barcode-layout">
+          <div class="pass-barcode-draw"></div>
+          <span class="pass-barcode-string" id="success-barcode-text">—</span>
+        </div>
+
+        <div class="pass-actions" style="display: flex; gap: 0.8rem; justify-content: center; width: 100%; margin-top: 8px;">
+          <button type="button" class="btn-terminate-signal" id="btn-download-pdf" style="background: var(--accent-gold); color: var(--navy-dark);">Download PDF Pass</button>
+          <button type="button" class="btn-terminate-signal" id="btn-close-circuit">Close Connection</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Init icons
+    lucide.createIcons();
+
+    // Elements
+    const tableBody = document.getElementById('table-body');
+    const tableLoader = document.getElementById('table-loader');
+    const tableEmpty = document.getElementById('table-empty');
+    const statsCounter = document.getElementById('stats-counter');
+    const searchInput = document.getElementById('table-search');
+    const starfield = document.getElementById('starfield');
+    const btnSignOut = document.getElementById('btn-sign-out');
+
+    let allStudents = [];
+
+    // Drifting starfield
+    const starCount = 50;
+    const stars = [];
+
+    function initStarfield() {
+      for (let i = 0; i < starCount; i++) {
+        const span = document.createElement('span');
+        span.classList.add('star');
+        
+        const size = Math.random() * 4 + 1.2;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const opacity = Math.random() * 0.6 + 0.15;
+
+        span.style.width = `${size}px`;
+        span.style.height = `${size}px`;
+        span.style.left = `${x}%`;
+        span.style.top = `${y}%`;
+        span.style.opacity = opacity;
+
+        if (Math.random() > 0.8) {
+          span.style.background = 'var(--accent-cyan)';
+          span.style.boxShadow = '0 0 8px var(--accent-cyan)';
+        } else {
+          span.style.background = '#e0f2f7';
+        }
+
+        starfield.appendChild(span);
+        stars.push({
+          el: span,
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 0.03,
+          vy: (Math.random() - 0.5) * 0.02 - 0.015
+        });
+      }
+    }
+
+    function animateStarfield() {
+      stars.forEach(s => {
+        s.x += s.vx;
+        s.y += s.vy;
+
+        if (s.x < -5) s.x = 105;
+        if (s.x > 105) s.x = -5;
+        if (s.y < -5) s.y = 105;
+        if (s.y > 105) s.y = -5;
+
+        s.el.style.left = `${s.x}%`;
+        s.el.style.top = `${s.y}%`;
+      });
+      requestAnimationFrame(animateStarfield);
+    }
+
+    initStarfield();
+    animateStarfield();
+
+    // Query Students from Firestore
+    function fetchStudents() {
+      if (isFirebaseReady) {
+        db.collection("students").orderBy("submittedAt", "desc").get()
+          .then((querySnapshot) => {
+            allStudents = [];
+            querySnapshot.forEach((doc) => {
+              allStudents.push(doc.data());
+            });
+
+            // Hide loader
+            tableLoader.style.display = 'none';
+            
+            // Render
+            renderTable(allStudents);
+            statsCounter.textContent = allStudents.length;
+          })
+          .catch((err) => {
+            console.error("Error fetching students:", err);
+            alert("Database Error: Failed to fetch registry records: " + err.message);
+            tableLoader.style.display = 'none';
+          });
+      } else {
+        // Sandbox Mock Mode fallback
+        setTimeout(() => {
+          tableLoader.style.display = 'none';
+          allStudents = [
+            {
+              fullName: "ELENA ROSTOVA",
+              studentId: "SRN25CS001",
+              programme: "B.TECH COMPUTER SCIENCE",
+              academicYear: "1ST YEAR",
+              address: "BANGALORE, KARNATAKA",
+              email: "elena@rostova.com",
+              submissionTime: new Date().toLocaleString('en-IN'),
+              admissionCycle: "AY 2025-26"
+            },
+            {
+              fullName: "ROHAN SHARMA",
+              studentId: "SRN25EC045",
+              programme: "B.TECH ELECTRONICS",
+              academicYear: "2ND YEAR",
+              address: "WHITEFIELD, BANGALORE",
+              email: "rohan@sharma.com",
+              submissionTime: new Date(Date.now() - 3600000).toLocaleString('en-IN'),
+              admissionCycle: "AY 2025-26"
+            }
+          ];
+          renderTable(allStudents);
+          statsCounter.textContent = allStudents.length;
+        }, 1200);
+      }
+    }
+
+    function renderTable(data) {
+      tableBody.innerHTML = '';
+      
+      if (data.length === 0) {
+        tableEmpty.style.display = 'block';
+        return;
+      } else {
+        tableEmpty.style.display = 'none';
+      }
+
+      data.forEach((student, index) => {
+        const tr = document.createElement('tr');
+        
+        // Formatted timestamp
+        const timeVal = student.submissionTime || (student.submittedAt ? new Date(student.submittedAt.seconds * 1000).toLocaleString('en-IN') : '—');
+
+        tr.innerHTML = `
+          <td style="font-weight: 600; color: #fff;">${escapeHtml(student.fullName)}</td>
+          <td style="font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.5px;">${escapeHtml(student.studentId)}</td>
+          <td><span class="course-badge">${escapeHtml(student.programme)}</span></td>
+          <td style="font-size: 0.85rem; font-weight: 600;">${escapeHtml(student.academicYear)}</td>
+          <td style="font-size: 0.85rem; color: var(--text-muted);">${escapeHtml(timeVal)}</td>
+          <td>
+            <button class="btn-row-action" onclick="inspectStudent(${index})">View Telemetry</button>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    // Escape HTML helper
+    function escapeHtml(str) {
+      if (!str) return '—';
+      return str.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Live search filter
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      if (!term) {
+        renderTable(allStudents);
+        return;
+      }
+
+      const filtered = allStudents.filter(s => {
+        return (
+          (s.fullName && s.fullName.toLowerCase().includes(term)) ||
+          (s.studentId && s.studentId.toLowerCase().includes(term)) ||
+          (s.programme && s.programme.toLowerCase().includes(term)) ||
+          (s.email && s.email.toLowerCase().includes(term))
+        );
+      });
+
+      renderTable(filtered);
+    });
+
+    // Modal view inspector
+    const successOverlay = document.getElementById('success-overlay');
+    const successCard = document.getElementById('success-card');
+    const btnCloseCircuit = document.getElementById('btn-close-circuit');
+    const btnDownloadPdf = document.getElementById('btn-download-pdf');
+
+    window.inspectStudent = function(index) {
+      const student = allStudents[index];
+      if (!student) return;
+
+      document.getElementById('success-name').textContent = student.fullName.toUpperCase();
+      document.getElementById('success-id').textContent = student.studentId.toUpperCase();
+      document.getElementById('success-course').textContent = student.programme.toUpperCase();
+      document.getElementById('success-cycle').textContent = student.academicYear.toUpperCase();
+      document.getElementById('success-coords').textContent = student.address.toUpperCase();
+      document.getElementById('success-barcode-text').textContent = student.studentId.toUpperCase();
+
+      const cycleYear = student.admissionCycle || "AY 2025-26";
+      document.getElementById('success-pass-subheader').textContent = `Sapthagiri NPS University // Travel & Admissions Pass (${cycleYear})`;
+
+      if (student.profilePhoto) {
+        document.getElementById('success-avatar').src = student.profilePhoto;
+      } else {
+        document.getElementById('success-avatar').src = '';
+      }
+
+      successOverlay.classList.add('reveal');
+    };
+
+    btnCloseCircuit.addEventListener('click', () => {
+      successOverlay.classList.remove('reveal');
+    });
+
+    // Perfect borderless high-definition PDF downloader
+    btnDownloadPdf.addEventListener('click', () => {
+      const passActions = document.querySelector('.pass-actions');
+      const passLaser = document.querySelector('.pass-scan-laser');
+      const element = document.getElementById('success-card');
+      
+      const originalDisplay = passActions.style.display;
+
+      // Force static, solid render styles
+      element.style.animation = 'none';
+      element.style.transform = 'none';
+      element.style.transition = 'none';
+      element.style.opacity = '1';
+      
+      passActions.style.display = 'none';
+      if (passLaser) passLaser.style.display = 'none';
+
+      // Measure exact responsive bounds
+      const rect = element.getBoundingClientRect();
+      
+      // Convert pixels to points (1 px = 0.75 pt) for jsPDF 1:1 mapping
+      const cardWidthPt = rect.width * 0.75;
+      const cardHeightPt = rect.height * 0.75;
+
+      const studentName = document.getElementById('success-name').textContent || "STUDENT";
+      const filenameStr = `Sapthagiri_NPS_University_Pass_${studentName.replace(/\s+/g, '_')}.pdf`;
+
+      const opt = {
+        margin:       0,
+        filename:     filenameStr,
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { 
+          width: rect.width,
+          height: rect.height,
+          scale: 3, 
+          useCORS: true, 
+          backgroundColor: '#0e182e',
+          logging: false,
+          letterRendering: true,
+          scrollX: 0,
+          scrollY: 0
+        },
+        jsPDF:        { unit: 'pt', format: [cardWidthPt, cardHeightPt], orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save().then(() => {
+        // Restore elements
+        passActions.style.display = originalDisplay;
+        if (passLaser) passLaser.style.display = 'block';
+      }).catch(err => {
+        console.error("PDF generation failed:", err);
+        passActions.style.display = originalDisplay;
+        if (passLaser) passLaser.style.display = 'block';
+      });
+    });
+
+    // Disconnect Administrator session
+    btnSignOut.addEventListener('click', () => {
+      localStorage.removeItem('sapthagiri_admin_token');
+      window.location.replace('login.html');
+    });
+
+    // Initial Fetch
+    fetchStudents();
+  </script>
+</body>
+</html>
