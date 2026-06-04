@@ -1146,17 +1146,22 @@
                 <label for="course">Programme / Course <span class="required-marker">*</span></label>
                 <select id="course" class="cyber-input" required aria-required="true">
                   <option value="">— Select Programme —</option>
-                  <option>B.Tech Computer Science</option>
-                  <option>B.Tech Electronics</option>
-                  <option>B.Sc Physics</option>
+                  <option>B.Tech Computer Science &amp; Engineering</option>
+                  <option>B.Tech Artificial Intelligence &amp; Machine Learning (AIML)</option>
+                  <option>B.Tech Data Science</option>
+                  <option>B.Tech Cyber Security</option>
+                  <option>B.Tech Electronics &amp; Communication</option>
                   <option>B.Sc Mathematics</option>
+                  <option>B.Sc Physics</option>
                   <option>B.Com (Honours)</option>
                   <option>MBA Business Administration</option>
-                  <option>M.Tech AI &amp; Machine Learning</option>
                   <option>MCA</option>
                   <option>BCA</option>
                 </select>
                 <span class="error-msg-balloon">Please select a programme.</span>
+                <div id="seat-availability-info" style="display: none; font-size: 0.78rem; font-weight: 600; color: var(--accent-cyan); margin-top: 5px; letter-spacing: 0.5px; transition: all 0.3s ease;">
+                  <span id="seat-text">Loading seat availability...</span>
+                </div>
               </div>
 
               <!-- Year -->
@@ -1324,6 +1329,89 @@
     studentIdInput.addEventListener('input', (e) => {
       e.target.value = e.target.value.toUpperCase();
     });
+
+    // Course Seat Availability System
+    const courseSelectElement = document.getElementById('course');
+    const seatInfoElement = document.getElementById('seat-availability-info');
+    const seatTextElement = document.getElementById('seat-text');
+    
+    // Default capacity for all courses
+    const COURSE_CAPACITY = 60;
+    let courseRegistrationCounts = {};
+
+    function fetchSeatAvailability() {
+      if (isFirebaseReady) {
+        db.collection("students").get()
+          .then((querySnapshot) => {
+            courseRegistrationCounts = {};
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              const course = data.programme; // Stored in uppercase usually
+              if (course) {
+                courseRegistrationCounts[course] = (courseRegistrationCounts[course] || 0) + 1;
+              }
+            });
+            updateSeatDisplay();
+          })
+          .catch((err) => {
+            console.error("Error fetching seat telemetry:", err);
+          });
+      } else {
+        // Sandbox fallback: generate random seed counts for simulation
+        console.log("Firebase not ready. Seeding simulated seat counts...");
+        courseRegistrationCounts = {
+          "B.TECH COMPUTER SCIENCE & ENGINEERING": 52,
+          "B.TECH ARTIFICIAL INTELLIGENCE & MACHINE LEARNING (AIML)": 58,
+          "B.TECH DATA SCIENCE": 15,
+          "B.TECH CYBER SECURITY": 40,
+          "B.TECH ELECTRONICS & COMMUNICATION": 22
+        };
+        updateSeatDisplay();
+      }
+    }
+
+    function updateSeatDisplay() {
+      const selectedOption = courseSelectElement.options[courseSelectElement.selectedIndex];
+      const courseVal = selectedOption.value;
+      
+      if (!courseVal) {
+        seatInfoElement.style.display = 'none';
+        return;
+      }
+
+      // Read uppercase version to match what's stored in Firestore
+      const courseKey = courseVal.toUpperCase();
+      const enrolledCount = courseRegistrationCounts[courseKey] || 0;
+      const remainingSeats = Math.max(0, COURSE_CAPACITY - enrolledCount);
+
+      seatInfoElement.style.display = 'block';
+
+      if (remainingSeats <= 0) {
+        seatInfoElement.style.color = 'var(--hazard)';
+        seatTextElement.innerHTML = `<i data-lucide="alert-octagon" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 4px; stroke-width: 2.5px;"></i>SEAT AVAILABILITY: COURSE IS FULL (0 SEATS REMAINING)`;
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+      } else if (remainingSeats <= 5) {
+        seatInfoElement.style.color = 'var(--accent-gold)';
+        seatTextElement.innerHTML = `<i data-lucide="alert-triangle" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 4px; stroke-width: 2.5px;"></i>SEAT AVAILABILITY: ONLY ${remainingSeats} SEATS REMAINING! (ACT FAST)`;
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+      } else {
+        seatInfoElement.style.color = 'var(--accent-cyan)';
+        seatTextElement.innerHTML = `<i data-lucide="info" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 4px; stroke-width: 2.5px;"></i>SEAT AVAILABILITY: ${remainingSeats} / ${COURSE_CAPACITY} SEATS AVAILABLE`;
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+      }
+      lucide.createIcons(); // Recalls to compile icon HTML
+    }
+
+    courseSelectElement.addEventListener('change', updateSeatDisplay);
+    
+    // Fetch seat counts initially
+    fetchSeatAvailability();
 
     // Zero-g background drifting particles (60 stars, varying depth)
     const starCount = 60;
